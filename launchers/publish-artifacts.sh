@@ -28,7 +28,7 @@ ssh -o "ProxyCommand=cloudflared access ssh --hostname %h" \
     -o "StrictHostKeyChecking=no" \
     -o "UserKnownHostsFile=/dev/null" \
     -i "${SSH_ID}" \
-    ${SSH_USERNAME}@${SSH_HOSTNAME} mkdir -p /books/${BOOK_NAME}/${BRANCH_NAME}
+    ${SSH_USERNAME}@${SSH_HOSTNAME} mkdir -p /books/${BOOK_NAME}/${BOOK_BRANCH_NAME}
 set +x
 
 # publish HTML
@@ -42,7 +42,7 @@ if [ "${PUBLISH_HTML:-false}" = true ]; then
                 -o \"UserKnownHostsFile=/dev/null\"
                 -i \"${SSH_ID}\"" \
         "${JB_HTML_OUT_DIR}/" \
-        ${SSH_USERNAME}@${SSH_HOSTNAME}:/books/${BOOK_NAME}/${BRANCH_NAME}
+        ${SSH_USERNAME}@${SSH_HOSTNAME}:/books/${BOOK_NAME}/${BOOK_BRANCH_NAME}
     set +x
 fi
 
@@ -54,7 +54,7 @@ if [ "${PUBLISH_PDF:-false}" = true ]; then
         -o "UserKnownHostsFile=/dev/null" \
         -i "${SSH_ID}" \
         "${JB_PDF_OUT_DIR}/book.pdf" \
-        ${SSH_USERNAME}@${SSH_HOSTNAME}:/books/${BOOK_NAME}/${BRANCH_NAME}/book.pdf
+        ${SSH_USERNAME}@${SSH_HOSTNAME}:/books/${BOOK_NAME}/${BOOK_BRANCH_NAME}/book.pdf
     set +x
 fi
 

@@ -31,16 +31,22 @@ mkdir -p ${JB_BUILD_CACHE_DIR}
 export HOME=${JB_BUILD_CACHE_DIR}
 cd /
 
+# copy source to internal temporary location
+cp -R ${JB_SOURCE_DIR} ${JB_SOURCE_TMP_DIR}
+
+# apply book decorators
+python3 -m book_decorator.add_branch_to_config ${BOOK_BRANCH_NAME}
+
 # compile book into HTML
 set -x
-jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_SOURCE_DIR}
+jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_SOURCE_TMP_DIR}
 set +x
 
 # compile book into PDF
 if [ "${BUILD_PDF:-false}" = true ]; then
     # build PDF from HTML
     set -x
-    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_SOURCE_DIR}
+    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_SOURCE_TMP_DIR}
     set +x
 fi
 
