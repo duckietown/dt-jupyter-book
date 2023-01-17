@@ -1,0 +1,4 @@
+div.figure:has(> a.framed),
+div.figure:has(> img.framed) {
+    border: 1px solid lightgray;
+}

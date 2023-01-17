@@ -34,6 +34,9 @@ cd /
 # copy source to internal temporary location
 cp -R ${JB_SOURCE_DIR} ${JB_SOURCE_TMP_DIR}
 
+# add static assets
+cp -R /assets/html/_static/* "${JB_SOURCE_TMP_DIR}/_static/"
+
 # apply book decorators
 python3 -m book_decorator.add_branch_to_config ${BOOK_BRANCH_NAME}
 
