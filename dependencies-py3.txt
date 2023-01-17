@@ -1,2 +1,15 @@
 # LIST YOUR PYTHON3 PACKAGES HERE
 # NOTE: only place non-Duckietown libraries here; pin versions only if necessary
+
+jupyter-book
+numpy
+scipy
+matplotlib
+sympy
+
+# image analyzer script
+imagesize
+beautifulsoup4
+
+# needed only for PDF building
+pyppeteer

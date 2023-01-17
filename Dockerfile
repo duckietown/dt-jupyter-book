@@ -1,7 +1,7 @@
 # parameters
-ARG REPO_NAME="<REPO_NAME_HERE>"
-ARG DESCRIPTION="<DESCRIPTION_HERE>"
-ARG MAINTAINER="<YOUR_FULL_NAME> (<YOUR_EMAIL_ADDRESS>)"
+ARG REPO_NAME="dt-jupyter-book"
+ARG DESCRIPTION="Jupyter Book environment, used to compile Duckietown books"
+ARG MAINTAINER="Andrea F. Daniele (afdaniele@ttic.edu)"
 # pick an icon from: https://fontawesome.com/v4.7.0/icons/
 ARG ICON="cube"
 
@@ -18,6 +18,7 @@ ARG LAUNCHER=default
 FROM ${DOCKER_REGISTRY}/duckietown/${BASE_IMAGE}:${BASE_TAG} as base
 
 # recall all arguments
+ARG ARCH
 ARG DISTRO
 ARG REPO_NAME
 ARG DESCRIPTION
@@ -50,6 +51,14 @@ ENV DT_MODULE_TYPE="${REPO_NAME}" \
     DT_LAUNCH_PATH="${LAUNCH_PATH}" \
     DT_LAUNCHER="${LAUNCHER}"
 
+# jupyter book environment
+ENV JB_SOURCE_DIR="/book" \
+    JB_OUT_DIR="/out" \
+    JB_HTML_OUT_DIR="/out/html" \
+    JB_PDF_OUT_DIR="/out/pdf" \
+    JB_BUILD_CACHE_DIR="/tmp/jb" \
+    SSH_ID="/ssh/id_rsa"
+
 # install apt dependencies
 COPY ./dependencies-apt.txt "${REPO_PATH}/"
 RUN dt-apt-install ${REPO_PATH}/dependencies-apt.txt
@@ -59,6 +68,20 @@ ARG PIP_INDEX_URL="https://pypi.org/simple"
 ENV PIP_INDEX_URL=${PIP_INDEX_URL}
 COPY ./dependencies-py3.* "${REPO_PATH}/"
 RUN dt-pip3-install "${REPO_PATH}/dependencies-py3.*"
+
+# install cloudflared binary
+RUN /bin/bash -c '\
+  # - pick correct architecture
+  set -e; \
+  declare -A _arch; \
+  _arch=(["arm32v7"]="arm" ["arm64v8"]="arm64" ["amd64"]="amd64") \
+  && arch="${_arch[$ARCH]}" \
+  # - download binaries
+  && wget -nv \
+    "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-${arch}" \
+    -O /usr/local/bin/cloudflared \
+  # - make binary executable
+  && chmod a+x /usr/local/bin/cloudflared'
 
 # copy the source code
 COPY ./packages "${REPO_PATH}/packages"
