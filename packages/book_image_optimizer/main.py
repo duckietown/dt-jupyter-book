@@ -57,7 +57,11 @@ def get_images_ids_and_path(root: str) -> Dict[ImageID, ImagePath]:
 def get_images_sizes(images_paths: Dict[ImageID, ImagePath]) -> Dict[ImageID, ImageSize]:
     result: Dict[str, tuple] = {}
     for image_id, image_path in images_paths.items():
-        width, height = imagesize.get(image_path)
+        try:
+            width, height = imagesize.get(image_path)
+        except Exception:
+            logger.warning(f"Invalid image found at: {image_path}")
+            continue
         if width == -1 or height == -1:
             # not an image file
             logger.warning(f"Invalid image found at: {image_path}")

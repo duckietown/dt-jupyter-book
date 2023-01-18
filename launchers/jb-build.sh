@@ -39,6 +39,7 @@ cp -R /assets/html/_static/* "${JB_SOURCE_TMP_DIR}/_static/"
 
 # apply book decorators
 python3 -m book_decorator.add_branch_to_config ${BOOK_BRANCH_NAME}
+python3 -m book_decorator.add_extensions
 
 # compile book into HTML
 set -x
