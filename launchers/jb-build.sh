@@ -26,6 +26,7 @@ fi
 
 # make directories
 mkdir -p ${JB_BUILD_CACHE_DIR}
+mkdir -p "${JB_SOURCE_TMP_DIR}/_static/"
 
 # configure environment
 export HOME=${JB_BUILD_CACHE_DIR}
