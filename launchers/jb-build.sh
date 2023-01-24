@@ -26,7 +26,6 @@ fi
 
 # make directories
 mkdir -p ${JB_BUILD_CACHE_DIR}
-mkdir -p "${JB_SOURCE_TMP_DIR}/_static/"
 
 # configure environment
 export HOME=${JB_BUILD_CACHE_DIR}
@@ -36,6 +35,7 @@ cd /
 cp -R ${JB_SOURCE_DIR} ${JB_SOURCE_TMP_DIR}
 
 # add static assets
+mkdir -p "${JB_SOURCE_TMP_DIR}/_static/"
 cp -R /assets/html/_static/* "${JB_SOURCE_TMP_DIR}/_static/"
 
 # apply book decorators
