@@ -32,28 +32,28 @@ export HOME=${JB_BUILD_CACHE_DIR}
 cd /
 
 # copy source to internal temporary location
-cp -R ${JB_SOURCE_DIR} ${JB_SOURCE_TMP_DIR}
+cp -R ${JB_SOURCE_DIR} ${JB_BOOK_TMP_DIR}
 
 # add static assets
-mkdir -p "${JB_SOURCE_TMP_DIR}/_static/"
-cp -R /assets/html/_static/* "${JB_SOURCE_TMP_DIR}/_static/"
+mkdir -p "${JB_BOOK_TMP_DIR}/src/_static/"
+cp -R /assets/html/_static/* "${JB_BOOK_TMP_DIR}/src/_static/"
 
 # apply book decorators
 python3 -m book_decorator.add_branch_to_config ${BOOK_BRANCH_NAME}
 python3 -m book_decorator.add_extensions
 
-# compile book into HTML
-set -x
-jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_SOURCE_TMP_DIR}
-set +x
-
-# compile book into PDF
+# compile book into PDF (must be done before the HTML)
 if [ "${BUILD_PDF:-false}" = true ]; then
     # build PDF from HTML
     set -x
-    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_SOURCE_TMP_DIR}
+    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_BOOK_TMP_DIR}/src
     set +x
 fi
+
+# compile book into HTML
+set -x
+jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
+set +x
 
 # export HTML
 if [ "${BUILD_HTML:-false}" = true ]; then

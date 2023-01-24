@@ -57,7 +57,7 @@ ENV JB_SOURCE_DIR="/book" \
     JB_HTML_OUT_DIR="/out/html" \
     JB_PDF_OUT_DIR="/out/pdf" \
     JB_BUILD_CACHE_DIR="/tmp/jb" \
-    JB_SOURCE_TMP_DIR="/tmp/src" \
+    JB_BOOK_TMP_DIR="/tmp/book" \
     SSH_ID="/ssh/id_rsa"
 
 # install apt dependencies
