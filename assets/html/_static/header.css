@@ -1,0 +1,10 @@
+.header-item.announcement{
+    color: darkslategrey;
+    background-color: inherit;
+    border-bottom: 1px solid lightgrey;
+    max-width: 1400px;
+    font-size: 0.9rem;
+    text-align: left;
+    margin: auto;
+    padding: 0.4rem;
+}
