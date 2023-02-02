@@ -166,8 +166,7 @@ def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]
                     logger.warning(f"Image '{pic_src}' in file '{str(path)}' has no 'style' attribute. "
                                    f"Using default maximum width of {THEME_MAX_WIDTH}px.")
                     # default size based on the sphinx theme
-                    html_imgs[pic_src] = {(THEME_MAX_WIDTH, -1)}
-                    continue
+                    html_imgs[pic_src] = max_image_size(html_imgs[pic_src], width=THEME_MAX_WIDTH, height=-1)
                 else:
                     # extract width and/or height from the HTML 'style' attribute
                     style_obj = parse_html_style_attribute(pic_style, interested_keys={"width", "height"})
@@ -175,6 +174,9 @@ def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]
                     # has at least valid width/height
                     if width > -1 or height > -1:
                         html_imgs[pic_src] = max_image_size(html_imgs[pic_src], width=width, height=height)
+                    else:  # has style="", but no height/width, i.e. parsed -1 for both
+                        html_imgs[pic_src] = max_image_size(html_imgs[pic_src], width=THEME_MAX_WIDTH, height=-1)
+
 
     # obtain max width and height for each image
     # - {fpath: (max_w, max_h)}
