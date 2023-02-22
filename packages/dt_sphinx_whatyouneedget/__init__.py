@@ -83,7 +83,7 @@ class RequirementsDirective(SphinxDirective):
 
         card = REQUIREMENTS_CARD_TEMPLATE.format(
             need=need,
-            need=get,
+            get=get,
         )
 
         self.state.nested_parse([card], 0, container)
