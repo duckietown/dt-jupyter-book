@@ -8,7 +8,7 @@ source /environment.sh
 
 set -eux
 
-# build PDF (must be built before the HTML)
+# build both PDF and HTML
 mkdir -p ${JB_PDF_OUT_DIR}
 mkdir -p ${JB_HTML_OUT_DIR}
 dt-launcher-jb-build
