@@ -8,8 +8,6 @@ __version__ = "0.0.1"
 
 REQUIREMENTS_CARD_TEMPLATE = """
 ````{{card}}
-**Requirements**
-^^^
 ````{{grid}} 2
 :margin: 0
 
@@ -18,7 +16,7 @@ REQUIREMENTS_CARD_TEMPLATE = """
 :padding: 0
 :class: sd-text-right
 
-{{bdg-danger}}`What you will need`
+{{bdg-secondary}}`What you will need`
 ```
 ```{{grid-item}}
 :columns: 12 9 9 10
@@ -28,7 +26,6 @@ REQUIREMENTS_CARD_TEMPLATE = """
 
 ```{{grid-item}}
 :columns: 12 12 12 12
-
 ```
 
 ```{{grid-item}}
@@ -36,7 +33,7 @@ REQUIREMENTS_CARD_TEMPLATE = """
 :padding: 0
 :class: sd-text-right
 
-{{bdg-success}}`What you will get`
+{{bdg-warning}}`What you will get`
 ```
 ```{{grid-item}}
 :columns: 12 9 9 10
