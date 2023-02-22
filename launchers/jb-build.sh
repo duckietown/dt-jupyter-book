@@ -46,7 +46,7 @@ python3 -m book_decorator.add_header
 # compile book into PDF (must be done before the HTML)
 if [ "${BUILD_PDF:-false}" = true ]; then
     # PDF needs images optimization to avoid big PDF files
-    dt-launcher-jb-optimize-images
+    python3 -m book_image_optimizer.main "${JB_BUILD_CACHE_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
     # build PDF from HTML
     set -x
     jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_BOOK_TMP_DIR}/src
