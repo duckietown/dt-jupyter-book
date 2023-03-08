@@ -5,6 +5,7 @@ import yaml
 EXTENSIONS = [
     "dt_sphinx_fa",
     "dt_sphinx_troubleshooting",
+    "dt_sphinx_whatyouneedget"
 ]
 
 if __name__ == '__main__':

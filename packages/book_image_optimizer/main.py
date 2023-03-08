@@ -177,7 +177,6 @@ def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]
                     else:  # has style="", but no height/width, i.e. parsed -1 for both
                         html_imgs[pic_src] = max_image_size(html_imgs[pic_src], width=THEME_MAX_WIDTH, height=-1)
 
-
     # obtain max width and height for each image
     # - {fpath: (max_w, max_h)}
     imgs_max = {}
@@ -187,8 +186,6 @@ def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]
         max_w = max([_w for _w, _ in set_sizes])
         max_h = max([_h for _, _h in set_sizes])
         imgs_max[fname] = (max_w, max_h)
-
-    print(imgs_max)
 
     # use the original aspect ratio of the image to find the maximum needed ratio-correct (w, h)
     imgs_sizes: Dict[ImageID, Tuple[int, int]] = {}
@@ -249,6 +246,11 @@ if __name__ == "__main__":
 
     # filter html images: keep only those matching a source image
     html_images_paths = {key: path for key, path in html_images_paths.items() if key in src_images_paths}
+
+    # filter html images: remove GIFs
+    html_images_paths = {
+        key: path for key, path in html_images_paths.items() if not path.lower().endswith(".gif")
+    }
 
     # find HTML image sizes
     html_images_sizes: Dict[ImageID, ImageSize] = find_html_images_sizes(html_path, html_images_paths)

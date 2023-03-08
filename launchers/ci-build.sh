@@ -9,7 +9,8 @@ source /environment.sh
 set -eux
 
 # build both PDF and HTML
-mkdir -p ${JB_PDF_OUT_DIR}
+# TODO: re-enable this
+#mkdir -p ${JB_PDF_OUT_DIR}
 mkdir -p ${JB_HTML_OUT_DIR}
 dt-launcher-jb-build
 
