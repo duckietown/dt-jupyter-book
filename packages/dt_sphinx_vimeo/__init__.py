@@ -27,7 +27,7 @@ VIDEO_CARD_TEMPLATE = """
 """
 
 
-class VideoEmbedDirective(SphinxDirective):
+class VimeoVideoDirective(SphinxDirective):
     """A directive to show video links."""
 
     name = DIRECTIVENAME
@@ -43,8 +43,6 @@ class VideoEmbedDirective(SphinxDirective):
     }
 
     def run(self) -> List[nodes.Node]:
-        env: BuildEnvironment = self.env
-
         container = nodes.container()
 
         vimdeo_video_id = self.arguments[0]
@@ -85,7 +83,7 @@ def setup(app):
     app.setup_extension("sphinx_design")
 
     # Add directives
-    app.add_directive(DIRECTIVENAME, VideoEmbedDirective)
+    app.add_directive(DIRECTIVENAME, VimeoVideoDirective)
     return {
         "version": __version__,
         "parallel_read_safe": True,
