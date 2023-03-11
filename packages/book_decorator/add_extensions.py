@@ -7,7 +7,8 @@ EXTENSIONS = [
     "dt_sphinx_troubleshooting",
     "dt_sphinx_whatyouneedget",
     "dt_sphinx_video",
-    "dt_sphinx_videoembed"
+    "dt_sphinx_videoembed",
+    "dt_sphinx_vimeo",
 ]
 
 if __name__ == '__main__':
