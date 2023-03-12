@@ -4,12 +4,15 @@ from typing import List
 from docutils import nodes
 from sphinx.util.docutils import SphinxDirective
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 TROUBLESHOOTING_CARD_TEMPLATE = """
 ````{{card}}
+:class-card: troubleshooting-card
+
 **Troubleshooting**
 ^^^
+
 ````{{grid}} 2
 :margin: 0
 
