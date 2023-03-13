@@ -1,0 +1,24 @@
+.sd-card.todo-card{
+    border-color: red;
+    border-width: 2px;
+}
+
+.sd-card.todo-card .sd-card-body{
+    background-color: floralwhite;
+    padding: 0;
+}
+
+.sd-card.todo-card .sd-card-body .sd-col:first-child{
+    min-height: 48px;
+    background-color: red;
+}
+
+.sd-card.todo-card .sd-card-body .sd-col:first-child > p{
+    margin: auto;
+    color: white;
+    font-weight: bold;
+}
+
+.sd-card.todo-card .sd-card-body .sd-col:last-child > p{
+    margin: auto 0;
+}
