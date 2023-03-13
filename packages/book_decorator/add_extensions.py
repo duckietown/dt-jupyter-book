@@ -11,6 +11,7 @@ EXTENSIONS = [
     "dt_sphinx_vimeo",
     "dt_sphinx_href",
     "dt_sphinx_rawimage",
+    "dt_sphinx_todo",
 ]
 
 PARSE_EXTENSIONS = [
