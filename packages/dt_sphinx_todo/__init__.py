@@ -1,32 +1,39 @@
 """A lightweight directive to make it easy to pull in Duckietown Vimeo links."""
-import copy
 import os
-from pathlib import Path
-from typing import List, Tuple, Union
-from urllib.parse import urlparse
+from typing import List
 
-import docutils
 from docutils import nodes
-from docutils.parsers.rst import directives
-from sphinx.environment import BuildEnvironment
-from sphinx.util.docutils import SphinxDirective, SphinxTranslator
+from sphinx.util.docutils import SphinxDirective, logger
 
 __version__ = "0.0.1"
-
 
 DIRECTIVENAME = "todo"
 OPTIONS: List[str] = []
 LOCAL_BUILD = os.environ.get("LOCAL_BUILD", "0").lower() in ["1", "y", "true"]
 
 TODO_CARD = """
-```{{card}}
+````{{card}}
 :class-card: todo-card
 
-**TODO**
-^^^
+````{{grid}} 2
+:margin: 0
+
+```{{grid-item}}
+:columns: 12 2 2 1
+:padding: 0
+:class: sd-text-center
+
+TODO
+```
+
+```{{grid-item}}
+:columns: 12 10 10 11
 
 {content}
 ```
+
+````
+````
 """
 
 
@@ -45,7 +52,12 @@ class ClickableDirective(SphinxDirective):
         if not LOCAL_BUILD:
             return []
 
-        md: str = TODO_CARD.format(content=self.content)
+        src_fpath, src_lineno = self.get_source_info()
+
+        logger.warning(f"TODO found at {src_fpath}:{src_lineno}")
+
+        content: str = "\n".join(self.content)
+        md: str = TODO_CARD.format(content=content)
 
         container = nodes.container()
         self.state.nested_parse([md], 0, container)
