@@ -46,6 +46,7 @@ cp -R /assets/html/_static/* "${JB_BOOK_TMP_DIR}/src/_static/"
 python3 -m book_decorator.add_branch_to_config ${BOOK_BRANCH_NAME}
 python3 -m book_decorator.add_extensions
 python3 -m book_decorator.add_header
+python3 -m book_decorator.add_library_as_intersphinx
 
 # compile book into PDF (must be done before the HTML)
 if [ "${BUILD_PDF:-false}" = true ]; then

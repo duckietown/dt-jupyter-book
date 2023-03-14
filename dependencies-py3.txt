@@ -13,3 +13,6 @@ beautifulsoup4
 
 # needed only for PDF building
 pyppeteer
+
+# used to fetch the books list from the online library
+requests
