@@ -8,6 +8,10 @@ source /environment.sh
 
 set -eu
 
+if [ "${DEBUG:-0}" = "1" ]; then
+    set -x
+fi
+
 # check if we want HTML
 if [ -d "${JB_HTML_OUT_DIR}" ]; then
     echo "Directory '${JB_HTML_OUT_DIR}' found. Will build HTML."
