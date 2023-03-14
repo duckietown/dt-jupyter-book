@@ -18,6 +18,7 @@ if __name__ == '__main__':
 
     # read list of books
     books_json_url: str = f"http://{LIBRARY_HOSTNAME}/books.json"
+    print(f"Fetching library from '{books_json_url}'...")
     try:
         books_json: dict = requests.get(books_json_url).json()
     except Exception as e:
@@ -34,8 +35,7 @@ if __name__ == '__main__':
         url: str = f"https://{LIBRARY_HOSTNAME}/{LIBRARY_DISTRO}/{book_name_short}"
         library[book_name] = (url, None)
 
-    # add branch field
-    _config["html"]["announcement"] = "&nbsp;"
+    print(f"The library contains {len(library)} books.")
 
     # create structure
     if "sphinx" not in _config:
@@ -45,13 +45,13 @@ if __name__ == '__main__':
     if "intersphinx_mapping" not in _config["sphinx"]["config"]:
         _config["sphinx"]["config"]["intersphinx_mapping"] = {}
 
+    # add library to configuration
+    _config["sphinx"]["config"]["intersphinx_mapping"].update(library)
+
     # print out library
     library_txt: str = yaml.safe_dump(list(_config["sphinx"]["config"]["intersphinx_mapping"].keys()))
     library_txt = '\n\t'.join(library_txt.splitlines())
     print(f"\nLibrary:\n\t{library_txt}\n")
-
-    # add library to configuration
-    _config["sphinx"]["config"]["intersphinx_mapping"].update(library)
 
     # safe _config file
     with open(_config_fpath, "wt") as fout:
