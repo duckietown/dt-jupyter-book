@@ -18,6 +18,14 @@ PARSE_EXTENSIONS = [
     "html_image",
 ]
 
+DEFAULT_EXTENSIONS = [
+    'colon_fence',
+    'dollarmath',
+    'linkify',
+    'substitution',
+    'tasklist'
+]
+
 if __name__ == '__main__':
     src_path: str = os.environ.get("JB_BOOK_TMP_DIR")
 
@@ -34,7 +42,7 @@ if __name__ == '__main__':
         _config["parse"] = {}
     if "myst_enable_extensions" not in _config["parse"]:
         _config["parse"]["myst_enable_extensions"] = []
-    _config["parse"]["myst_enable_extensions"] += PARSE_EXTENSIONS
+    _config["parse"]["myst_enable_extensions"] = DEFAULT_EXTENSIONS + PARSE_EXTENSIONS
 
     # safe _config file
     with open(_config_fpath, "wt") as fout:

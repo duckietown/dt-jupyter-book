@@ -9,7 +9,7 @@ __version__ = "0.0.1"
 
 DIRECTIVENAME = "todo"
 OPTIONS: List[str] = []
-LOCAL_BUILD = os.environ.get("LOCAL_BUILD", "0").lower() in ["1", "y", "true"]
+PRODUCTION_BUILD = os.environ.get("PRODUCTION_BUILD", "0").lower() in ["1", "y", "true"]
 
 TODO_CARD = """
 ````{{card}}
@@ -49,7 +49,7 @@ class ClickableDirective(SphinxDirective):
     option_spec = {}
 
     def run(self) -> List[nodes.Node]:
-        if not LOCAL_BUILD:
+        if PRODUCTION_BUILD:
             return []
 
         src_fpath, src_lineno = self.get_source_info()
