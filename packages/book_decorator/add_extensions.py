@@ -12,6 +12,7 @@ EXTENSIONS = [
     "dt_sphinx_href",
     "dt_sphinx_rawimage",
     "dt_sphinx_todo",
+    "dt_sphinx_testexpect",
 ]
 
 PARSE_EXTENSIONS = [
