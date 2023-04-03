@@ -46,7 +46,7 @@ REQUIREMENTS_CARD_TEMPLATE = """
 """
 
 SEPARATOR = "---"
-DIRECTIVENAME = "testresult"
+DIRECTIVENAME = "testexpect"
 
 class RequirementsDirective(SphinxDirective):
     """A directive to show source / result content blocks."""
