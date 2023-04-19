@@ -1,67 +1,63 @@
 """A lightweight example directive to make it easy to demonstrate code / results."""
-from typing import List
-
 from docutils import nodes
 from sphinx.util.docutils import SphinxDirective
+from typing import List
 
 __version__ = "0.0.1"
 
 REQUIREMENTS_CARD_TEMPLATE = """
-````{{card}}
-````{{grid}} 2
+:::::{{card}}
+
+::::{{grid}} 2
 :margin: 0
 
-```{{grid-item}}
+:::{{grid-item}}
 :columns: 12 3 3 2
 :padding: 0
 :class: sd-text-right
 
 {{bdg-secondary}}`Test`
-```
-```{{grid-item}}
+:::
+
+:::{{grid-item}}
 :columns: 12 9 9 10
 
 {test}
-```
+:::
 
-```{{grid-item}}
+:::{{grid-item}}
 :columns: 12 12 12 12
-```
 
-```{{grid-item}}
+:::
+
+:::{{grid-item}}
 :columns: 12 3 3 2
 :padding: 0
 :class: sd-text-right
 
 {{bdg-success}}`Expected Result`
-```
-```{{grid-item}}
+:::
+
+:::{{grid-item}}
 :columns: 12 9 9 10
 
 {expect}
-```
+:::
 
-````
-````
+::::
+
+:::::
 """
 
 SEPARATOR = "---"
 DIRECTIVENAME = "testexpect"
 
-class RequirementsDirective(SphinxDirective):
+
+class TestExpectDirective(SphinxDirective):
     """A directive to show source / result content blocks."""
 
     name = DIRECTIVENAME
     has_content = True
-
-    # required_arguments = 0
-    # optional_arguments = 0
-    # final_argument_whitespace = True
-    # option_spec = {
-    #     "class": directives.class_option,
-    #     "reverse": directives.flag,
-    #     "no-container": directives.flag,
-    # }
 
     def run(self) -> List[nodes.Node]:
         lines = list(map(lambda line: line.strip(), self.content))
@@ -100,7 +96,7 @@ def setup(app):
     app.setup_extension("sphinx_design")
 
     # Add directives
-    app.add_directive(DIRECTIVENAME, RequirementsDirective)
+    app.add_directive(DIRECTIVENAME, TestExpectDirective)
     return {
         "version": __version__,
         "parallel_read_safe": True,
