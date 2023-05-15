@@ -16,3 +16,5 @@ pyppeteer
 
 # used to fetch the books list from the online library
 requests
+
+sphinx-examples
