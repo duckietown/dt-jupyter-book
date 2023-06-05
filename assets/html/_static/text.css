@@ -1,5 +1,11 @@
+/* text is justified */
 #main-content p {
     text-align: justify;
+}
+
+/* figure captions are centered */
+.figure > p.caption {
+    text-align: center;
 }
 
 .troubleshooting-card ul {
