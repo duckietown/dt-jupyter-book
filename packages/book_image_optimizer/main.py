@@ -285,6 +285,11 @@ if __name__ == "__main__":
     media["images"].update({
         k: dataclasses.asdict(v) for k, v in images.items()
     })
+
+    # create parent path if non-existing
+    if not os.path.exists(media_fpath):
+        Path(html_path).mkdir(parents=True, exist_ok=True)
+
     # write map to disk
     with open(media_fpath, "wt") as fout:
         json.dump(media, fout, sort_keys=True, indent=4)
