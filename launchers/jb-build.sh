@@ -8,6 +8,8 @@ source /environment.sh
 
 set -eu
 
+BOOK_NAME=${DT_PROJECT_NAME}
+
 if [ "${DEBUG:-0}" = "1" ]; then
     set -x
 fi
@@ -41,6 +43,9 @@ cp -R ${JB_SOURCE_DIR} ${JB_BOOK_TMP_DIR}
 # add static assets
 mkdir -p "${JB_BOOK_TMP_DIR}/src/_static/"
 cp -R /assets/html/_static/* "${JB_BOOK_TMP_DIR}/src/_static/"
+
+# replace placeholders
+sed -i "s/BOOK_NAME_HERE/${BOOK_NAME}/g" "${JB_BOOK_TMP_DIR}/src/_config.yml"
 
 # apply book decorators
 python3 -m book_decorator.add_branch_to_config ${BOOK_BRANCH_NAME}
