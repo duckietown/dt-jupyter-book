@@ -300,8 +300,10 @@ if __name__ == "__main__":
 
     # shrink images
     if parsed.inplace:
+        logger.info("Resizing SOURCE images...")
         resize_src_images(src_path, images)
     else:
+        logger.info("Resizing HTML images...")
         resize_html_images(html_path, images)
 
     # make all paths relative
