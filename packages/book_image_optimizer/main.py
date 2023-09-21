@@ -1,9 +1,9 @@
+import argparse
 import dataclasses
 import json
 import logging
 import os
 import subprocess
-import sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, Tuple, Set, List
@@ -229,9 +229,42 @@ def resize_html_images(html_dir: str, imgs: Dict[ImageID, Image]):
         subprocess.check_call(cmd, shell=True)
 
 
+def resize_src_images(src_dir: str, imgs: Dict[ImageID, Image]):
+    for _, img in imgs.items():
+        if img.src_size is None:
+            continue
+        if img.html_size is None:
+            continue
+
+        rel_fpath: str = os.path.relpath(img.src_path, src_dir)
+        src_width, src_height = img.src_size
+        width, height = img.html_size
+        reduction: int = int(100 * (1 - ((width * height) / (src_width * src_height))))
+        if reduction <= 0:
+            # no need to resize the image
+            continue
+        logger.info(f"Resizing image '{rel_fpath}': {src_width}x{src_height} -> {width}x{height}  -  "
+                    f"{reduction}% smaller")
+        cmd = IMAGEMAGICK_RESIZE_CMD.format(
+            src=img.src_path, dst=img.src_path, width=width, height=height
+        )
+        logger.debug(f"$ {cmd}")
+        subprocess.check_call(cmd, shell=True)
+
+
 if __name__ == "__main__":
-    src_path: str = os.path.abspath(sys.argv[1])
-    html_path: str = os.path.abspath(sys.argv[2])
+    # define arguments
+    parser: argparse.ArgumentParser = argparse.ArgumentParser()
+    parser.add_argument("--inplace", default=False, action="store_true", help="Resize images at the source")
+    parser.add_argument("src", help="Location of the book's source")
+    parser.add_argument("html", help="Location of the book's HTML")
+
+    # parse arguments
+    parsed: argparse.Namespace = parser.parse_args()
+
+    # get src and [html] paths
+    src_path: str = os.path.abspath(parsed.src)
+    html_path: str = os.path.abspath(parsed.html)
 
     # html images are stored inside the _images directory
     html_images: str = os.path.join(html_path, "_images")
@@ -265,8 +298,11 @@ if __name__ == "__main__":
         ) for img_id, html_size in html_images_sizes.items()
     }
 
-    # shrink HTML images
-    resize_html_images(html_path, images)
+    # shrink images
+    if parsed.inplace:
+        resize_src_images(src_path, images)
+    else:
+        resize_html_images(html_path, images)
 
     # make all paths relative
     for image in images.values():
