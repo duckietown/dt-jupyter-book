@@ -6,6 +6,21 @@ source /environment.sh
 # ----------------------------------------------------------------------------
 
 
+# Variables
+#
+#   DEBUG: [integer]                Turns on/off debug prints
+#   JB_BUILD_CACHE_DIR: [str]       Place where the book will be built, you can mount it from the outside to re-use pre-built files as cache
+#   JB_SOURCE_DIR: [str]            Place where the book source files are stored (usually mounted from outside)
+#   BOOK_BRANCH_NAME: [str]         Name of the branch we are building
+#   OPTIMIZE_IMAGES: [bool]         Whether images are optimized in the HTML
+#   JB_BOOK_TMP_DIR: [str]          Place where the source code will be copied to and the book built from
+#   JUPYTERBOOK_BUILD_ARGS: [str]   Space-separated arguments fo `jb build`
+#   JB_OUT_DIR: [str]               Place where the resulting files will be copied, usually the root of JB_HTML_OUT_DIR and JB_PDF_OUT_DIR
+#   JB_HTML_OUT_DIR: [str]          Place where the resulting HTML files will be copied
+#   JB_PDF_OUT_DIR: [str]           Place where the resulting PDF file will be copied
+#
+
+
 set -eu
 
 if [ "${DEBUG:-0}" = "1" ]; then
@@ -53,7 +68,7 @@ python3 -m book_decorator.add_library_as_intersphinx
 jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
 
 # optimize images
-if [ "${OPTIMIZE_IMAGES:-false}" = true ]; then
+if [ "${OPTIMIZE_IMAGES:-0}" = "1" ]; then
     python3 -m book_image_optimizer.main "${JB_BOOK_TMP_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
 fi
 

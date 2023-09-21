@@ -11,7 +11,7 @@ set -eux
 # build both PDF and HTML
 mkdir -p ${JB_PDF_OUT_DIR}
 mkdir -p ${JB_HTML_OUT_DIR}
-OPTIMIZE_IMAGES=true dt-launcher-jb-build
+OPTIMIZE_IMAGES=1 dt-launcher-jb-build
 
 # store SSH_KEY to SSH_ID file
 mkdir -p $(dirname ${SSH_ID})
