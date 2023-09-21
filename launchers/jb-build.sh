@@ -50,9 +50,7 @@ python3 -m book_decorator.add_google_analytics
 python3 -m book_decorator.add_library_as_intersphinx
 
 # compile book into HTML
-set -x
 jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
-set +x
 
 # optimize images
 if [ "${OPTIMIZE_IMAGES:-false}" = true ]; then
@@ -74,9 +72,7 @@ if [ "${BUILD_PDF:-false}" = true ]; then
     # clear html (the PDF's HTML is a single page HTML, so we need to build again, but now with smaller images)
     jb clean ${JB_BUILD_CACHE_DIR}
     # build PDF from HTML
-    set -x
     jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_BOOK_TMP_DIR}/src
-    set +x
 fi
 
 # export PDF
