@@ -65,33 +65,32 @@ python3 -m book_decorator.add_google_analytics
 python3 -m book_decorator.add_library_as_intersphinx
 
 # compile book into HTML
-jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
-
-# optimize images
-if [ "${OPTIMIZE_IMAGES:-0}" = "1" ]; then
-    python3 -m book_image_optimizer.main "${JB_BOOK_TMP_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
-fi
-
-# export HTML
 if [ "${BUILD_HTML:-false}" = true ]; then
+    # produce HTML
+    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
+    # optimize images
+    if [ "${OPTIMIZE_IMAGES:-0}" = "1" ]; then
+        python3 -m book_image_optimizer.main "${JB_BOOK_TMP_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
+    fi
     # copy HTML out of build artifacts
     cp -R ${JB_BUILD_CACHE_DIR}/_build/html ${JB_OUT_DIR}
     # remove _sources from artifacts
     rm -rf ${JB_HTML_OUT_DIR}/_sources
 fi
 
-# compile book into PDF (must be done after the HTML)
+# clear everything
+jb clean ${JB_BUILD_CACHE_DIR}
+
+# compile book into PDF
 if [ "${BUILD_PDF:-false}" = true ]; then
-    # PDF requires images optimization to avoid big PDF files
+    # compile book into HTML (again, we need the original images back in the cache HTML dir)
+    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
+    # PDF always requires images optimization to avoid big PDF files
     python3 -m book_image_optimizer.main --inplace "${JB_BOOK_TMP_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
     # clear html (the PDF's HTML is a single page HTML, so we need to build again, but now with smaller images)
     jb clean ${JB_BUILD_CACHE_DIR}
     # build PDF from HTML
     jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_BOOK_TMP_DIR}/src
-fi
-
-# export PDF
-if [ "${BUILD_PDF:-false}" = true ]; then
     # copy PDF out of build artifacts
     cp -R ${JB_BUILD_CACHE_DIR}/_build/pdf ${JB_OUT_DIR}
 fi
