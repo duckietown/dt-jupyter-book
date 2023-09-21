@@ -56,7 +56,7 @@ set +x
 
 # optimize images
 if [ "${OPTIMIZE_IMAGES:-false}" = true ]; then
-    python3 -m book_image_optimizer.main "${JB_SOURCE_DIR}" "${JB_HTML_OUT_DIR}"
+    python3 -m book_image_optimizer.main "${JB_BOOK_TMP_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
 fi
 
 # export HTML
