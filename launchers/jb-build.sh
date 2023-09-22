@@ -6,6 +6,21 @@ source /environment.sh
 # ----------------------------------------------------------------------------
 
 
+# Variables
+#
+#   DEBUG: [integer]                Turns on/off debug prints
+#   JB_BUILD_CACHE_DIR: [str]       Place where the book will be built, you can mount it from the outside to re-use pre-built files as cache
+#   JB_SOURCE_DIR: [str]            Place where the book source files are stored (usually mounted from outside)
+#   BOOK_BRANCH_NAME: [str]         Name of the branch we are building
+#   OPTIMIZE_IMAGES: [bool]         Whether images are optimized in the HTML
+#   JB_BOOK_TMP_DIR: [str]          Place where the source code will be copied to and the book built from
+#   JUPYTERBOOK_BUILD_ARGS: [str]   Space-separated arguments fo `jb build`
+#   JB_OUT_DIR: [str]               Place where the resulting files will be copied, usually the root of JB_HTML_OUT_DIR and JB_PDF_OUT_DIR
+#   JB_HTML_OUT_DIR: [str]          Place where the resulting HTML files will be copied
+#   JB_PDF_OUT_DIR: [str]           Place where the resulting PDF file will be copied
+#
+
+
 set -eu
 
 BOOK_NAME=${DT_PROJECT_NAME}
@@ -54,31 +69,33 @@ python3 -m book_decorator.add_header
 python3 -m book_decorator.add_google_analytics
 python3 -m book_decorator.add_library_as_intersphinx
 
-# compile book into PDF (must be done before the HTML)
-if [ "${BUILD_PDF:-false}" = true ]; then
-    # PDF needs images optimization to avoid big PDF files
-    python3 -m book_image_optimizer.main "${JB_BUILD_CACHE_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
-    # build PDF from HTML
-    set -x
-    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_BOOK_TMP_DIR}/src
-    set +x
-fi
-
 # compile book into HTML
-set -x
-jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
-set +x
-
-# export HTML
 if [ "${BUILD_HTML:-false}" = true ]; then
+    # produce HTML
+    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
+    # optimize images
+    if [ "${OPTIMIZE_IMAGES:-0}" = "1" ]; then
+        python3 -m book_image_optimizer.main "${JB_BOOK_TMP_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
+    fi
     # copy HTML out of build artifacts
     cp -R ${JB_BUILD_CACHE_DIR}/_build/html ${JB_OUT_DIR}
     # remove _sources from artifacts
     rm -rf ${JB_HTML_OUT_DIR}/_sources
 fi
 
-# export PDF
+# clear everything
+jb clean ${JB_BUILD_CACHE_DIR}
+
+# compile book into PDF
 if [ "${BUILD_PDF:-false}" = true ]; then
+    # compile book into HTML (again, we need the original images back in the cache HTML dir)
+    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
+    # PDF always requires images optimization to avoid big PDF files
+    python3 -m book_image_optimizer.main --inplace "${JB_BOOK_TMP_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
+    # clear html (the PDF's HTML is a single page HTML, so we need to build again, but now with smaller images)
+    jb clean ${JB_BUILD_CACHE_DIR}
+    # build PDF from HTML
+    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_BOOK_TMP_DIR}/src
     # copy PDF out of build artifacts
     cp -R ${JB_BUILD_CACHE_DIR}/_build/pdf ${JB_OUT_DIR}
 fi
