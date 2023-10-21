@@ -62,6 +62,7 @@ python3 -m book_decorator.add_branch_to_config ${BOOK_BRANCH_NAME}
 python3 -m book_decorator.add_extensions
 python3 -m book_decorator.add_header
 python3 -m book_decorator.add_google_analytics
+python3 -m book_decorator.add_hubspot_tracker
 python3 -m book_decorator.add_library_as_intersphinx
 
 # compile book into HTML
