@@ -9,13 +9,9 @@ source /environment.sh
 set -eux
 
 # build both PDF and HTML
-# TODO: re-enable this
-#mkdir -p ${JB_PDF_OUT_DIR}
+mkdir -p ${JB_PDF_OUT_DIR}
 mkdir -p ${JB_HTML_OUT_DIR}
-dt-launcher-jb-build
-
-# optimize images
-dt-launcher-jb-optimize-images
+OPTIMIZE_IMAGES=1 dt-launcher-jb-build
 
 # store SSH_KEY to SSH_ID file
 mkdir -p $(dirname ${SSH_ID})
