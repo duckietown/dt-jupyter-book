@@ -1,0 +1,7 @@
+default:
+  volumes:
+    - /data:/data
+  environment:
+    BOOK_BRANCH_NAME: test
+    LIBRARY_DISTRO: ente
+    LIBRARY_HOSTNAME: staging-docs.duckietown.com
