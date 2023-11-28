@@ -30,9 +30,9 @@ class JsonSchemaDirective(SphinxDirective):
     
     def run(self) -> List[nodes.Node]:
         schema_relative_path = self.arguments[0]
-        src_path: str = os.environ.get("JB_BOOK_TMP_DIR")
+        src_path: str = os.environ.get("JB_SOURCE_DIR")
 
-        schema_path = os.path.abspath(os.path.join(src_path, "src", schema_relative_path))
+        schema_path = os.path.abspath(os.path.join(src_path, schema_relative_path))
 
         if not os.path.exists(schema_path):
             src_fpath, src_lineno = self.get_source_info()
