@@ -72,6 +72,7 @@ python3 -m book_decorator.add_hubspot_tracker
 python3 -m book_decorator.add_library_as_intersphinx
 python3 -m book_decorator.add_lang_code
 python3 -m book_decorator.add_assets_dir
+python3 -m book_decorator.add_sitemap_generation
 python3 -m book_decorator.add_book_info_to_html
 python3 -m book_decorator.add_distro_to_title ${LIBRARY_DISTRO}
 
