@@ -1,17 +1,19 @@
-/* text is justified */
+/* justify the text */
 #main-content p {
     text-align: justify;
 }
 
-/* figure captions are centered */
-.figure > p.caption {
-    text-align: center;
+/* keep figure caption centered */
+div.figure > p.caption {
+    text-align: center !important;
 }
 
+/* adjust troubleshooting formatting */
 .troubleshooting-card ul {
     padding: 0;
 }
 
+/* adjust header font sizes */
 :root {
     --pst-font-size-h1: 34px;
     --pst-font-size-h2: 26px;

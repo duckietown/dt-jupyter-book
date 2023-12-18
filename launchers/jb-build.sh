@@ -57,6 +57,12 @@ cp -R ${JB_SOURCE_DIR} ${JB_BOOK_TMP_DIR}
 mkdir -p "${JB_BOOK_TMP_DIR}/src/_static/"
 cp -R /assets/html/_static/* "${JB_BOOK_TMP_DIR}/src/_static/"
 
+# add book assets
+mkdir "${JB_BOOK_TMP_DIR}/src/__assets"
+if [ -d "${JB_SOURCE_DIR}/src/_assets" ]; then
+    cp -R "${JB_SOURCE_DIR}/src/_assets" "${JB_BOOK_TMP_DIR}/src/__assets/_assets"
+fi
+
 # apply book decorators
 python3 -m book_decorator.add_branch_to_config ${BOOK_BRANCH_NAME}
 python3 -m book_decorator.add_extensions
@@ -64,6 +70,12 @@ python3 -m book_decorator.add_header
 python3 -m book_decorator.add_google_analytics
 python3 -m book_decorator.add_hubspot_tracker
 python3 -m book_decorator.add_library_as_intersphinx
+python3 -m book_decorator.add_lang_code
+python3 -m book_decorator.add_assets_dir
+python3 -m book_decorator.add_robots_txt
+python3 -m book_decorator.add_sitemap_generation
+python3 -m book_decorator.add_book_info_to_html
+python3 -m book_decorator.add_distro_to_title ${LIBRARY_DISTRO}
 
 # compile book into HTML
 if [ "${BUILD_HTML:-false}" = true ]; then

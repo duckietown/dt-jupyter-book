@@ -13,6 +13,7 @@ EXTENSIONS = [
     "dt_sphinx_rawimage",
     "dt_sphinx_todo",
     "dt_sphinx_testexpect",
+    "dt_sphinx_slides",
 ]
 
 PARSE_EXTENSIONS = [
