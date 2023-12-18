@@ -34,3 +34,6 @@ sphinx-sitemap==2.5.1
 
 # examples
 sphinx-examples==0.0.5
+
+# custom duckietown theme
+git+https://github.com/duckietown/sphinx-book-theme.git@v0.3.3-dt1
