@@ -88,8 +88,14 @@ if [ "${BUILD_HTML:-false}" = true ]; then
     # add SEO metadata
     if [ "${ADD_SEO_METADATA:-1}" = "1" ]; then
         echo "Processing SEO data..."
-        python3 -m book_seo_html.main "${JB_BUILD_CACHE_DIR}/_build/html"
+        python3 -m book_seo_process_html.main "${JB_BUILD_CACHE_DIR}/_build/html"
         echo "SEO data processed!"
+    fi
+    # check SEO metadata
+    if [ "${CHECK_SEO_METADATA:-1}" = "1" ]; then
+        echo "Checking SEO data..."
+        python3 -m book_seo_check_html.main "${JB_BUILD_CACHE_DIR}/_build/html"
+        echo "SEO data checked! Errors, if any, are shown above."
     fi
     # copy HTML out of build artifacts
     cp -R ${JB_BUILD_CACHE_DIR}/_build/html ${JB_OUT_DIR}
