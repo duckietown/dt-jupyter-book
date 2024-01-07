@@ -23,6 +23,8 @@ ImageID = str
 ImagePath = str
 ImageSize = Tuple[int, int]
 
+HTML_IMG_LAZY_LOADING: bool = os.environ.get("HTML_IMG_LAZY_LOADING", "1").lower() in ["1", "yes", "true"]
+
 logging.basicConfig()
 logger = logging.getLogger('ImagesOptimizer')
 logger.setLevel(
@@ -84,7 +86,7 @@ def parse_html_style_attribute(style_str: str, interested_keys: Set[str], ) -> D
             assert len(splitted) == 2
             key, val = map(lambda s: s.strip(), splitted)
             if key in interested_keys:
-                result[key] = val
+                result[key] = val.strip()
         except Exception as e:
             logger.warning(f"Failed to parse style attribute \"{style_str}\", error: {str(e)}")
     # ---
@@ -101,6 +103,11 @@ def parse_width_height(style_obj: Dict[str, str]) -> Tuple[float, float]:
     if width_str is not None:
         try:
             width = float(width_str.replace("px", ""))
+        except ValueError:
+            pass
+        # parse percentage
+        try:
+            width = (float(width_str.replace("%", "")) / 100) * THEME_MAX_WIDTH
         except ValueError:
             pass
     # parse height
@@ -126,11 +133,25 @@ def max_image_size(lst_sizes: Set[Tuple[float, float]], width: float, height: fl
             ret.remove((w, h))
             continue
         if w >= width and h >= width:
-            # no need to add given width&height
+            # no need to add given (width, height)
             ret.remove((width, height))
             break
 
     return ret
+
+
+def optimal_image_size(fname: str, width: int, height: int) -> Tuple[int, int]:
+    img_w, img_h = imagesize.get(fname)
+    if width / img_w > height / img_h:
+        # width wins
+        ar_height = (width / img_w) * img_h
+        assert ar_height >= height
+        return int(width), int(ar_height)
+    else:
+        # height wins
+        ar_width = (height / img_h) * img_w
+        assert ar_width >= width
+        return int(ar_width), int(height)
 
 
 def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]) \
@@ -145,37 +166,55 @@ def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]
     html_imgs = defaultdict(set)
     for path in Path(html_dir).rglob("*.html"):
         with open(path.absolute(), 'r') as f_html:
-            # parse html to find <img> tags
             html_content = f_html.read()
-            soup = BeautifulSoup(html_content, "html.parser")
-            imgs = soup.find_all("img")
-            for pic in imgs:
-                pic_src = str(pic["src"])
-                # if web source, ignore source
-                if pic_src.startswith(("http://", "https://")):
-                    continue
-                # find absolute path to the image
-                pic_src = str(path.parent.joinpath(pic_src).absolute().resolve())
-                # make sure we are not looking where we don't have to
-                if pic_src not in images_ids:
-                    continue
+        # parse html to find <img> tags
+        soup = BeautifulSoup(html_content, "html.parser")
+        imgs = soup.find_all("img")
+        for pic in imgs:
+            pic_src = str(pic["src"])
+            # if web source, ignore source
+            if pic_src.startswith(("http://", "https://")):
+                continue
+            # find absolute path to the image
+            pic_src = str(path.parent.joinpath(pic_src).absolute().resolve())
+            # make sure we are not looking where we don't have to
+            if pic_src not in images_ids:
+                continue
 
-                # retrieve width/height px values
-                pic_style: str = pic.get("style")  # jupyter-book generated images use this attribute
-                if pic_style is None:
-                    logger.warning(f"Image '{pic_src}' in file '{str(path)}' has no 'style' attribute. "
-                                   f"Using default maximum width of {THEME_MAX_WIDTH}px.")
-                    # default size based on the sphinx theme
-                    html_imgs[pic_src] = max_image_size(html_imgs[pic_src], width=THEME_MAX_WIDTH, height=-1)
-                else:
-                    # extract width and/or height from the HTML 'style' attribute
-                    style_obj = parse_html_style_attribute(pic_style, interested_keys={"width", "height"})
-                    width, height = parse_width_height(style_obj)
-                    # has at least valid width/height
-                    if width > -1 or height > -1:
-                        html_imgs[pic_src] = max_image_size(html_imgs[pic_src], width=width, height=height)
-                    else:  # has style="", but no height/width, i.e. parsed -1 for both
-                        html_imgs[pic_src] = max_image_size(html_imgs[pic_src], width=THEME_MAX_WIDTH, height=-1)
+            # retrieve width/height px values
+            img_width: int
+            img_height: int = -1
+            pic_style: str = pic.get("style")  # jupyter-book generated images use this attribute
+            if pic_style is None:
+                logger.warning(f"Image '{pic_src}' in file '{str(path)}' has no 'style' attribute. "
+                               f"Using default maximum width of {THEME_MAX_WIDTH}px.")
+                # default size based on the sphinx theme
+                html_imgs[pic_src] = max_image_size(html_imgs[pic_src], width=THEME_MAX_WIDTH, height=-1)
+                img_width: int = THEME_MAX_WIDTH
+            else:
+                # extract width and/or height from the HTML 'style' attribute
+                style_obj = parse_html_style_attribute(pic_style, interested_keys={"width", "height"})
+                width, height = parse_width_height(style_obj)
+                img_width: int = int(width)
+                img_height: int = int(height)
+                # has at least valid width/height
+                if width > -1 or height > -1:
+                    html_imgs[pic_src] = max_image_size(html_imgs[pic_src],
+                                                        width=width, height=height)
+                else:  # has style="", but no height/width, i.e. parsed -1 for both
+                    html_imgs[pic_src] = max_image_size(html_imgs[pic_src],
+                                                        width=THEME_MAX_WIDTH, height=-1)
+                    img_width: int = THEME_MAX_WIDTH
+            # set image size in the HTML file
+            img_width, img_height = optimal_image_size(pic_src, img_width, img_height)
+            pic.attrs["width"] = int(img_width)
+            pic.attrs["height"] = int(img_height)
+            # set lazy loading
+            if HTML_IMG_LAZY_LOADING:
+                pic.attrs["loading"] = "lazy"
+        # write back to file
+        with open(path.absolute(), 'w') as f_html:
+            f_html.write(str(soup))
 
     # obtain max width and height for each image
     # - {fpath: (max_w, max_h)}
@@ -190,18 +229,8 @@ def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]
     # use the original aspect ratio of the image to find the maximum needed ratio-correct (w, h)
     imgs_sizes: Dict[ImageID, Tuple[int, int]] = {}
     for fname, (max_w, max_h) in imgs_max.items():
-        img_w, img_h = imagesize.get(fname)
         img_id = images_ids[fname]
-        if max_w / img_w > max_h / img_h:
-            # width wins
-            ar_height = (max_w / img_w) * img_h
-            assert ar_height >= max_h
-            imgs_sizes[img_id] = (int(max_w), int(ar_height))
-        else:
-            # height wins
-            ar_width = (max_h / img_h) * img_w
-            assert ar_width >= max_w
-            imgs_sizes[img_id] = (int(ar_width), int(max_h))
+        imgs_sizes[img_id] = optimal_image_size(fname, max_w, max_h)
     # ---
     return imgs_sizes
 
