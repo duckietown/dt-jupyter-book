@@ -14,6 +14,7 @@ EXTENSIONS = [
     "dt_sphinx_todo",
     "dt_sphinx_testexpect",
     "dt_sphinx_slides",
+    "dt_sphinx_seo",
 ]
 
 PARSE_EXTENSIONS = [

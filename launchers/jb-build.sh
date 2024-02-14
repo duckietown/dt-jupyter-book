@@ -72,6 +72,7 @@ python3 -m book_decorator.add_hubspot_tracker
 python3 -m book_decorator.add_library_as_intersphinx
 python3 -m book_decorator.add_lang_code
 python3 -m book_decorator.add_assets_dir
+python3 -m book_decorator.add_copyright_year
 python3 -m book_decorator.add_robots_txt
 python3 -m book_decorator.add_sitemap_generation
 python3 -m book_decorator.add_book_info_to_html
@@ -85,6 +86,18 @@ if [ "${BUILD_HTML:-false}" = true ]; then
     if [ "${OPTIMIZE_IMAGES:-0}" = "1" ]; then
         python3 -m book_image_optimizer.main "${JB_BOOK_TMP_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
     fi
+    # add SEO metadata
+    if [ "${ADD_SEO_METADATA:-1}" = "1" ]; then
+        echo "Processing SEO data..."
+        python3 -m book_seo_process_html.main "${JB_BUILD_CACHE_DIR}/_build/html"
+        echo "SEO data processed!"
+    fi
+    # check SEO metadata
+    if [ "${CHECK_SEO_METADATA:-1}" = "1" ]; then
+        echo "Checking SEO data..."
+        python3 -m book_seo_check_html.main "${JB_BUILD_CACHE_DIR}/_build/html"
+        echo "SEO data checked! Errors, if any, are shown above."
+    fi
     # copy HTML out of build artifacts
     cp -R ${JB_BUILD_CACHE_DIR}/_build/html ${JB_OUT_DIR}
     # remove _sources from artifacts
@@ -97,13 +110,13 @@ jb clean ${JB_BUILD_CACHE_DIR}
 # compile book into PDF
 if [ "${BUILD_PDF:-false}" = true ]; then
     # compile book into HTML (again, we need the original images back in the cache HTML dir)
-    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
+    HTML_IMG_LAZY_LOADING=0 jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} ${JB_BOOK_TMP_DIR}/src
     # PDF always requires images optimization to avoid big PDF files
     python3 -m book_image_optimizer.main --inplace "${JB_BOOK_TMP_DIR}" "${JB_BUILD_CACHE_DIR}/_build/html"
     # clear html (the PDF's HTML is a single page HTML, so we need to build again, but now with smaller images)
     jb clean ${JB_BUILD_CACHE_DIR}
     # build PDF from HTML
-    jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_BOOK_TMP_DIR}/src
+    HTML_IMG_LAZY_LOADING=0 jb build ${JUPYTERBOOK_BUILD_ARGS:-} --path-output ${JB_BUILD_CACHE_DIR} --builder pdfhtml ${JB_BOOK_TMP_DIR}/src
     # copy PDF out of build artifacts
     cp -R ${JB_BUILD_CACHE_DIR}/_build/pdf ${JB_OUT_DIR}
 fi
