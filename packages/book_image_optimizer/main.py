@@ -168,7 +168,7 @@ def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]
         with open(path.absolute(), 'r') as f_html:
             html_content = f_html.read()
         # parse html to find <img> tags
-        soup = BeautifulSoup(html_content, "html.parser")
+        soup = BeautifulSoup(html_content, "lxml")
         imgs = soup.find_all("img")
         for pic in imgs:
             pic_src = str(pic["src"])
