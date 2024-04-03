@@ -20,7 +20,7 @@ if __name__ == '__main__':
     books_json_url: str = f"http://{LIBRARY_HOSTNAME}/books.json"
     print(f"Fetching library from '{books_json_url}'...")
     try:
-        books_json: dict = requests.get(books_json_url).json()
+        books_json: dict = requests.get(books_json_url, timeout=3).json()
     except Exception as e:
         print(f"WARNING: The library could not be fetched from '{books_json_url}'. Error reads: {str(e)}")
         books_json = {}
