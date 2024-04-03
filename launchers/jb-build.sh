@@ -23,6 +23,10 @@ source /environment.sh
 
 set -eu
 
+if [ -d "${IMPERSONATE_UID}" ]; then
+    sudo chown -R ${IMPERSONATE_UID}:${IMPERSONATE_GID} /tmp/jb/
+fi
+
 if [ "${DEBUG:-0}" = "1" ]; then
     set -x
 fi
