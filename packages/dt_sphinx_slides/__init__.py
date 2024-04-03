@@ -7,10 +7,10 @@ from urllib.parse import urlparse
 
 from docutils import nodes
 from docutils.parsers.rst import directives
-from sphinx.util.docutils import SphinxDirective
+from sphinx.util.docutils import SphinxDirective, logger
 
-__version__ = "0.0.1"
 
+__version__ = "0.0.2"
 DIRECTIVENAME = "slides"
 
 OPTIONS: List[str] = [
@@ -61,6 +61,10 @@ class VideoEmbedDirective(SphinxDirective):
             # local PDF file relative to source
             pdf_fpath: str = os.path.realpath(os.path.join(source_fdir, pdf_src))
             pdf_fname: str = os.path.basename(pdf_fpath)
+            # make sure the file exists
+            if not os.path.isfile(pdf_fpath):
+                logger.error(f"PDF file not found: {pdf_fpath}")
+                exit(1)
         else:
             pdf_url: str = urllib.parse.unquote(pdf_src)
             pdf_fname: str = pdf_url.split("?")[0].split("/")[-1]
