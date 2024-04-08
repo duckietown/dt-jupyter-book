@@ -15,6 +15,8 @@ EXTENSIONS = [
     "dt_sphinx_testexpect",
     "dt_sphinx_slides",
     "dt_sphinx_seo",
+    "sphinx.ext.autodoc",
+    "sphinxcontrib.autodoc_pydantic"
 ]
 
 PARSE_EXTENSIONS = [
@@ -27,8 +29,6 @@ DEFAULT_EXTENSIONS = [
     'linkify',
     'substitution',
     'tasklist',
-    'sphinx.ext.autodoc',
-    'sphinxcontrib.autodoc_pydantic'
 ]
 
 if __name__ == '__main__':
