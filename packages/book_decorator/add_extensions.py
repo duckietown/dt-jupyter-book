@@ -15,8 +15,6 @@ EXTENSIONS = [
     "dt_sphinx_testexpect",
     "dt_sphinx_slides",
     "dt_sphinx_seo",
-    "sphinx.ext.autodoc",
-    "sphinxcontrib.autodoc_pydantic"
 ]
 
 PARSE_EXTENSIONS = [

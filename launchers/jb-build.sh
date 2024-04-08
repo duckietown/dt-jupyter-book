@@ -81,6 +81,7 @@ python3 -m book_decorator.add_robots_txt
 python3 -m book_decorator.add_sitemap_generation
 python3 -m book_decorator.add_book_info_to_html
 python3 -m book_decorator.add_distro_to_title ${LIBRARY_DISTRO}
+python3 -m book_decorator.add_pydantic_support
 
 # compile book into HTML
 if [ "${BUILD_HTML:-false}" = true ]; then
