@@ -1,0 +1,56 @@
+/* hide string "pydantic model" */
+dl.pydantic_model > dt > em.property {
+    display: none;
+}
+
+/* start with everything non-bold */
+dl.pydantic_model dt {
+    font-weight: normal;
+}
+
+/* make the class signature bold */
+dl.pydantic_model > dt.sig-object {
+    font-weight: bold;
+}
+
+/* add blue background */
+dl.pydantic_model {
+    background-color: aliceblue;
+}
+
+/* header containing the class signature is darker */
+dl.pydantic_model > dt {
+    background-color: #0071bc29;
+    padding: 0.4rem 1rem;
+}
+
+/* reduce left margin */
+dl.pydantic_model > dd {
+    margin-left: 20px;
+}
+
+/* add a little bit of space after each field */
+dl.pydantic_model > dd > dl.pydantic_field {
+    padding-bottom: 0.5rem;
+}
+
+/* add a little bit of space to the left of each field */
+dl.pydantic_model > dd > dl.pydantic_field > dt {
+    padding-left: 0.4rem;
+}
+
+/* hide the string "field" before every field */
+dl.pydantic_model > dd > dl.pydantic_field > dt > em:first-child {
+    display: none;
+}
+
+/* make the type of every non-bold and more code-like */
+dl.pydantic_model > dd > dl.pydantic_field > dt > em > span.pre {
+    font-style: normal;
+    font-family: monospace;
+}
+
+/* fields are highlighted when their ID is added to the URL as the anchor */
+dl.pydantic_model dt:target, span.highlighted {
+    background-color: #4eb8ff29;
+}

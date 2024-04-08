@@ -26,7 +26,9 @@ DEFAULT_EXTENSIONS = [
     'dollarmath',
     'linkify',
     'substitution',
-    'tasklist'
+    'tasklist',
+    'sphinx.ext.autodoc',
+    'sphinxcontrib.autodoc_pydantic'
 ]
 
 if __name__ == '__main__':

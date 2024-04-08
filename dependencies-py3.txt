@@ -47,5 +47,12 @@ sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
 
+# html parser
+lxml_html_clean
+
+# pydantic to parse and document models
+pydantic<2,>=1
+autodoc_pydantic<2
+
 # custom duckietown theme
 git+https://github.com/duckietown/sphinx-book-theme.git@v0.3.3-dt1
