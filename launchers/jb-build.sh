@@ -23,7 +23,7 @@ source /environment.sh
 
 set -eu
 
-if [ -d "${IMPERSONATE_UID}" ]; then
+if [ ! -z "${IMPERSONATE_UID:-}" ]; then
     sudo chown -R ${IMPERSONATE_UID}:${IMPERSONATE_GID} /tmp/jb/
 fi
 
