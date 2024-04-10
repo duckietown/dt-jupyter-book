@@ -24,7 +24,7 @@ ipython==8.12.2
 ipywidgets==7.7.5
 
 # sphinx
-sphinx==4.5.0
+Sphinx==4.5.0
 
 # jupyter
 jupyter_client==8.3.0
@@ -51,5 +51,5 @@ sphinxcontrib-serializinghtml==1.1.5
 lxml_html_clean==0.1.1
 
 # pydantic to parse and document models
-pydantic<2,>=1
-autodoc_pydantic<2
+pydantic==1.10.15
+autodoc-pydantic==1.9.0
