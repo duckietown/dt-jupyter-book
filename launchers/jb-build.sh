@@ -24,7 +24,7 @@ source /environment.sh
 set -eu
 
 if [ ! -z "${IMPERSONATE_UID:-}" ]; then
-    sudo chown -R ${IMPERSONATE_UID}:${IMPERSONATE_GID} /tmp/jb/
+    sudo chown -R ${IMPERSONATE_UID} /tmp/jb/
 fi
 
 if [ "${DEBUG:-0}" = "1" ]; then
