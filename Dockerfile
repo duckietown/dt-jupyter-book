@@ -111,3 +111,6 @@ LABEL org.duckietown.label.module.type="${REPO_NAME}" \
 
 # copy HTML assets to add to every book
 COPY assets/html /assets/html
+
+# install custom duckietown theme
+RUN pip3 install --no-deps git+https://github.com/duckietown/sphinx-book-theme.git@v0.3.3-dt1
