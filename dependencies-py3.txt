@@ -52,4 +52,4 @@ lxml_html_clean==0.1.1
 
 # pydantic to parse and document models
 pydantic==1.10.15
-autodoc-pydantic==1.9.0
+autodoc-pydantic==1.9.1

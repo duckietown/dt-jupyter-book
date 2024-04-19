@@ -37,7 +37,9 @@ if __name__ == '__main__':
     # Summary List Order:
     #  https://autodoc-pydantic.readthedocs.io/en/stable/users/configuration.html#summary-list-order
     if "autodoc_pydantic_model_summary_list_order" not in _config["sphinx"]["config"]:
-        _config["sphinx"]["config"]["autodoc_pydantic_model_summary_list_order"] = "bysource"
+        # _config["sphinx"]["config"]["autodoc_pydantic_model_summary_list_order"] = "bysource"
+        # TODO: disabled because of this issue: https://github.com/mansenfranzen/autodoc_pydantic/issues/137
+        pass
 
     # safe _config file
     with open(_config_fpath, "wt") as fout:
