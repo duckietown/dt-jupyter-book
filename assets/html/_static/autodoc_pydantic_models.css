@@ -54,3 +54,8 @@ dl.pydantic_model > dd > dl.pydantic_field > dt > em > span.pre {
 dl.pydantic_model dt:target, span.highlighted {
     background-color: #4eb8ff29;
 }
+
+/* hide methods */
+dl.pydantic_model > dd > dl.py.method {
+    display: none;
+}
