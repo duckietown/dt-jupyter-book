@@ -19,6 +19,9 @@ IMAGEMAGICK_RESIZE_CMD = "convert {src} -resize {width}x{height} {dst}"
 # 810px is the max width of the main content column of the sphinx theme
 THEME_MAX_WIDTH = 810
 
+# font size is 16 (measured in a built book)
+FONT_SIZE = 16
+
 ImageID = str
 ImagePath = str
 ImageSize = Tuple[int, int]
@@ -110,6 +113,11 @@ def parse_width_height(style_obj: Dict[str, str]) -> Tuple[float, float]:
             width = (float(width_str.replace("%", "")) / 100) * THEME_MAX_WIDTH
         except ValueError:
             pass
+        # parse em
+        try:
+            width = int(width_str.replace("em", "")) * FONT_SIZE
+        except ValueError:
+            pass
     # parse height
     if height_str is not None:
         try:
@@ -154,8 +162,8 @@ def optimal_image_size(fname: str, width: int, height: int) -> Tuple[int, int]:
         return int(ar_width), int(height)
 
 
-def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]) \
-        -> Dict[ImageID, Tuple[int, int]]:
+def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath],
+                           images_sizes: Dict[ImageID, ImageSize]) -> Dict[ImageID, Tuple[int, int]]:
     """
     Parse all HTML files, extract all <img> tags, find the requested size for each image file
     """
@@ -187,10 +195,10 @@ def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]
             pic_style: str = pic.get("style")  # jupyter-book generated images use this attribute
             if pic_style is None:
                 logger.warning(f"Image '{pic_src}' in file '{str(path)}' has no 'style' attribute. "
-                               f"Using default maximum width of {THEME_MAX_WIDTH}px.")
+                               f"Using default maximum width of {THEME_MAX_WIDTH}px as upper bound.")
                 # default size based on the sphinx theme
                 html_imgs[pic_src] = max_image_size(html_imgs[pic_src], width=THEME_MAX_WIDTH, height=-1)
-                img_width: int = THEME_MAX_WIDTH
+                img_width: int = min(THEME_MAX_WIDTH, images_sizes[images_ids[pic_src]][0])
             else:
                 # extract width and/or height from the HTML 'style' attribute
                 style_obj = parse_html_style_attribute(pic_style, interested_keys={"width", "height"})
@@ -315,7 +323,7 @@ if __name__ == "__main__":
     }
 
     # find HTML image sizes
-    html_images_sizes: Dict[ImageID, ImageSize] = find_html_images_sizes(html_path, html_images_paths)
+    html_images_sizes: Dict[ImageID, ImageSize] = find_html_images_sizes(html_path, html_images_paths, src_images_sizes)
 
     # combine data into single data structure
     images: Dict[ImageID, Image] = {
