@@ -216,7 +216,8 @@ def find_html_images_sizes(html_dir: str, images_paths: Dict[ImageID, ImagePath]
             # set image size in the HTML file
             img_width, img_height = optimal_image_size(pic_src, img_width, img_height)
             pic.attrs["width"] = int(img_width)
-            pic.attrs["height"] = int(img_height)
+            # NOTE: disabled as it messed up images when put side-to-side
+            # pic.attrs["height"] = int(img_height)
             # set lazy loading
             if HTML_IMG_LAZY_LOADING:
                 pic.attrs["loading"] = "lazy"
