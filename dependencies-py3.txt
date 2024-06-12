@@ -1,5 +1,4 @@
 # LIST YOUR PYTHON3 PACKAGES HERE
-# NOTE: only place non-Duckietown libraries here; pin versions only if necessary
 
 jupyter-book==0.13.2
 numpy==1.26.2
@@ -52,7 +51,7 @@ lxml_html_clean==0.1.1
 
 # pydantic to parse and document models
 pydantic==1.10.15
-autodoc-pydantic==1.9.1
+autodoc_pydantic==1.9.1
 
 # jsonschema
 jsonschema2md==1.0.0
