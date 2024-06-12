@@ -1,0 +1,7 @@
+default:
+  container: default
+  service: dt-devcontainer
+  customizations:
+    vscode:
+      extensions:
+        - "donjayamanne.python-extension-pack"

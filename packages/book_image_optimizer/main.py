@@ -291,7 +291,7 @@ if __name__ == "__main__":
     # parse arguments
     parsed: argparse.Namespace = parser.parse_args()
 
-    # get src and [html] paths
+    # get src and html paths
     src_path: str = os.path.abspath(parsed.src)
     html_path: str = os.path.abspath(parsed.html)
 

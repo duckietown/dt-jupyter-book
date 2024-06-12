@@ -23,6 +23,8 @@ source /environment.sh
 
 set -eu
 
+BOOK_NAME=${DT_PROJECT_NAME}
+
 if [ ! -z "${IMPERSONATE_UID:-}" ]; then
     sudo chown -R ${IMPERSONATE_UID} /tmp/jb/
 fi
@@ -66,6 +68,9 @@ mkdir "${JB_BOOK_TMP_DIR}/src/__assets"
 if [ -d "${JB_SOURCE_DIR}/src/_assets" ]; then
     cp -R "${JB_SOURCE_DIR}/src/_assets" "${JB_BOOK_TMP_DIR}/src/__assets/_assets"
 fi
+
+# replace placeholders
+sed -i "s/BOOK_NAME_HERE/${BOOK_NAME}/g" "${JB_BOOK_TMP_DIR}/src/_config.yml"
 
 # apply book decorators
 python3 -m book_decorator.add_branch_to_config ${BOOK_BRANCH_NAME}
