@@ -58,3 +58,6 @@ libnss3
 lsb-release
 xdg-utils
 wget
+
+# needed to install scipy on arm64v8
+gfortran
