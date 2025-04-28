@@ -8,9 +8,14 @@ source /environment.sh
 
 set -eux
 
-# build both PDF and HTML
-mkdir -p ${JB_PDF_OUT_DIR}
+# Disabling PDF build for now due to this error:
+# https://ci.duckietown.com/view/books%20-%20ente/job/Book%20Build%20-%20ente%20-%20book-opmanual-duckiebot/27/console
+# mkdir -p ${JB_PDF_OUT_DIR}
+
+
 mkdir -p ${JB_HTML_OUT_DIR}
+
+
 OPTIMIZE_IMAGES=1 dt-launcher-jb-build
 
 # store SSH_KEY to SSH_ID file
