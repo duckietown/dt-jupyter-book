@@ -6,6 +6,11 @@
 
 set -eu
 
+# store SSH_KEY to SSH_ID file
+mkdir -p $(dirname ${SSH_ID})
+echo "${SSH_KEY}" > ${SSH_ID}
+chmod 600 ${SSH_ID}
+
 # check if we want to publish HTML
 if [ -d "${JB_HTML_OUT_DIR}" ]; then
     echo "Directory '${JB_HTML_OUT_DIR}' found. Will publish HTML."
