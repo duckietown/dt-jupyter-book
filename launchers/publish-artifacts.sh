@@ -1,10 +1,12 @@
 #!/bin/bash
 
+source /environment.sh
+
 # YOUR CODE BELOW THIS LINE
 # ----------------------------------------------------------------------------
 
 
-set -eu
+set -eux
 
 # store SSH_KEY to SSH_ID file
 mkdir -p $(dirname ${SSH_ID})
