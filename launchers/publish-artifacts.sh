@@ -8,6 +8,8 @@ source /environment.sh
 
 set -eux
 
+echo"Starting publish artifacts"
+
 # store SSH_KEY to SSH_ID file
 mkdir -p $(dirname ${SSH_ID})
 echo "${SSH_KEY}" > ${SSH_ID}
