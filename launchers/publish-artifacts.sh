@@ -18,7 +18,7 @@ chmod 600 ${SSH_ID}
 # check if we want to publish HTML
 if [ -d "${JB_HTML_OUT_DIR}" ]; then
     echo "Directory '${JB_HTML_OUT_DIR}' found. Will publish HTML."
-    cat index.html
+    ls -alh ${JB_HTML_OUT_DIR}
     PUBLISH_HTML=true
 else
     echo "Directory '${JB_HTML_OUT_DIR}' not found. Skipping HTML publication."
