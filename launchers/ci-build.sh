@@ -16,7 +16,7 @@ set -eux
 mkdir -p ${JB_HTML_OUT_DIR}
 
 
-OPTIMIZE_IMAGES=1 dt-launcher-jb-build
+OPTIMIZE_IMAGES=0 dt-launcher-jb-build
 
 
 
