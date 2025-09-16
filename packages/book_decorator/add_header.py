@@ -5,11 +5,11 @@ import yaml
 
 DISTRO_BANNER = {
     # TODO: uncomment this once we switch to ente
-    # "daffy": "⚠️WARNING: You are looking at the 'daffy' version of this book. 'daffy' is now an old "
-    #          "version and we suggest you switch to the newer 'ente' distribution! ⚠️",
+    "daffy": "⚠️WARNING: You are looking at the 'daffy' version of this book. 'daffy' is now an old "
+              "version and we suggest you switch to the newer 'ente' distribution! ⚠️",
     # TODO: remove this once we switch to ente
-    "ente": "⚠️WARNING: You are looking at the 'ente' version of this book. 'ente' is still under "
-            "development, we suggest you switch to the 'daffy' distribution for a more stable experience! ⚠️",
+    # "ente": "⚠️WARNING: You are looking at the 'ente' version of this book. 'ente' is still under "
+    #        "development, we suggest you switch to the 'daffy' distribution for a more stable experience! ⚠️",
 }
 
 
